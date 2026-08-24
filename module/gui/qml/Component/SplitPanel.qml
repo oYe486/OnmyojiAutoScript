@@ -6,6 +6,11 @@ import "../Global"
 Item {
     id: splitPanel
     property string title: ""
+    property string defaultConfigName: ""
+    property var loaderArgs: null
+    property var loaderValue: null
+    property string loaderConfigName: ""
+    property string loaderTaskName: ""
 
     // 左边菜单
     FluArea{
@@ -37,11 +42,14 @@ Item {
         anchors.bottomMargin: 12
 
         onLoaded: {
-            if(typeof contentDefalut.item.splitPanel === "undefined"){
-                return
+            if (contentDefalut.item !== null) {
+                if(typeof contentDefalut.item.splitPanel !== "undefined"){
+                    contentDefalut.item.splitPanel = menuArea.parent
+                }
+                if (defaultConfigName !== "" && typeof contentDefalut.item.configName !== "undefined") {
+                    contentDefalut.item.configName = defaultConfigName
+                }
             }
-
-            contentDefalut.item.splitPanel = menuArea.parent
         }
     }
     Loader{
@@ -53,6 +61,18 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 12
+
+        onLoaded: {
+            if (loaderArgs !== null && loaderValue !== null) {
+                contentLoader.item.argsData = loaderArgs
+                contentLoader.item.valueData = loaderValue
+                contentLoader.item.updataData()
+            }
+            if (loaderConfigName !== "") {
+                contentLoader.item.configName = loaderConfigName
+                contentLoader.item.taskName = loaderTaskName
+            }
+        }
     }
 
     //创建左边的菜单，最多两级
@@ -113,6 +133,11 @@ Item {
 //    }
     //设置右边显示的参数项，输入的序列的字符串
     function setLoaderData(args, value){
+        loaderArgs = args
+        loaderValue = value
+        if (contentLoader.item === null) {
+            return
+        }
         contentLoader.item.argsData = args
         contentLoader.item.valueData = value
         contentLoader.item.updataData()
@@ -120,13 +145,21 @@ Item {
 
     //设置上下文
     function setLoaderContext(configName, taskName){
+        loaderConfigName = configName
+        loaderTaskName = taskName
+        if (contentLoader.item === null) {
+            return
+        }
         contentLoader.item.configName = configName
         contentLoader.item.taskName = taskName
     }
 
     //设置配置的名称
     function setDefalutConfig(name){
-        contentDefalut.item.configName = name
+        defaultConfigName = name
+        if (contentDefalut.item !== null && typeof contentDefalut.item.configName !== "undefined") {
+            contentDefalut.item.configName = name
+        }
     }
 
 

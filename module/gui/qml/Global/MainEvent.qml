@@ -16,7 +16,7 @@ QtObject {
     }
 
     // 界面的自定义设置
-    property var settings: {""}
+    property var settings: ""
     property bool settingInit: true  // 表示这个时候是初始化的，初始化后变为false
     property int displayMode : FluNavigationView.Compact
     property int darkMode: FluDarkMode.System
@@ -38,16 +38,17 @@ QtObject {
 
     Component.onCompleted:{
         var set = JSON.parse(setting.read())
-        mainEvent.settings = set
-        if(mainEvent.settings === ""){
-            mainEvent.settings = {
+        if (!set || typeof set !== "object") {
+            set = {
                 "displayMode": 1,
                 "darkMode": 2,
                 "primaryColor": "Orange",
                 "nativeText": true,
                 "language": "简体中文",
-                "dpiStrategy": ""}
+                "dpiStrategy": ""
+            }
         }
+        mainEvent.settings = set
 
         mainEvent.displayMode = set["displayMode"]
         mainEvent.darkMode = set["darkMode"]
@@ -100,9 +101,6 @@ QtObject {
     }
     onPrimaryColorChanged: {
         if(mainEvent.settings === ""){
-            console.debug('primaryColor and is none')
-            var set = JSON.parse(setting.read())
-            mainEvent.settings = set
             return
         }
 

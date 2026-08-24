@@ -126,10 +126,16 @@ SplitPanel{
         const component = Qt.createComponent("../../qml/Component/Overview.qml")
         if (component.status === Component.Ready) {
             setDefalut(component)
-
+        } else if (component.status === Component.Loading) {
+            component.statusChanged.connect(function() {
+                if (component.status === Component.Ready) {
+                    setDefalut(component)
+                } else if (component.status === Component.Error) {
+                    console.error(component.errorString())
+                }
+            })
         } else {
-            // 组件加载失败
-            console.debug('组件!加载失败')
+            console.error(component.errorString())
         }
     }
 }

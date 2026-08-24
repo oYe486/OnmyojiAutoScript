@@ -56,16 +56,20 @@ FluWindow {
             }
     }
 
-    //添加一份脚本实例的dialog
-    Add{
-        id: add
-        property bool add_open: MainEvent.addOpen
-        onAdd_openChanged: {
-            add.open()
-        }
-        onUpdateScriptItems: {
-            nav_view.items.addFluPaneItems()
-//            process_manager.create_all()
+    Item {
+        anchors.fill: parent
+
+        //添加一份脚本实例的dialog
+        Add{
+            id: add
+            property bool add_open: MainEvent.addOpen
+            onAdd_openChanged: {
+                add.open()
+            }
+            onUpdateScriptItems: {
+                nav_view.items.addFluPaneItems()
+    //            process_manager.create_all()
+            }
         }
     }
 //    Notity{
@@ -87,7 +91,6 @@ FluWindow {
             nav_view.setCurrentIndex(0)
             items.addFluPaneItems()
 
-            notity.open()
         }
     }
     Component.onCompleted:{

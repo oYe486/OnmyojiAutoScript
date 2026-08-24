@@ -31,6 +31,9 @@ class FluentApp():
         # QGuiApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
         # QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
         os.putenv("QT_QUICK_CONTROLS_STYLE", "Basic")
+        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
+            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+        )
 
         FluentApp.app = QGuiApplication(sys.argv)
         QGuiApplication.setWindowIcon(QIcon(os.fspath(Path(__file__).resolve().parent / "res/icon.ico")))
