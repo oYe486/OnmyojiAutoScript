@@ -12,9 +12,9 @@ class GeneralInviteAssets:
 
 	# Image Rule Assets
 	# 中间的邀请图片 
-	I_ADD_1 = RuleImage(roi_front=(596,241,114,51), roi_back=(569,196,186,161), threshold=0.9, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_add_1.png")
+	I_ADD_1 = RuleImage(roi_front=(596,241,114,51), roi_back=(569,196,186,161), threshold=0.9, method="Template matching", file="./tasks/Component/CostumeTeam/team1/team1_add_1.png")
 	# 最右边的邀请 
-	I_ADD_2 = RuleImage(roi_front=(1013,249,100,100), roi_back=(970,151,193,220), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_add_2.png")
+	I_ADD_2 = RuleImage(roi_front=(1013,249,100,100), roi_back=(970,151,193,220), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeTeam/team1/team1_add_2.png")
 	# description 
 	I_FIRE_FAIL = RuleImage(roi_front=(1177,604,81,74), roi_back=(1177,604,81,74), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_fire_fail.png")
 	# description 
@@ -34,13 +34,13 @@ class GeneralInviteAssets:
 	# 永生之海 没有锁定队伍的图片 
 	I_UNLOCK_SEA = RuleImage(roi_front=(781,656,27,30), roi_back=(781,656,27,30), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_unlock_sea.png")
 	# 五人的队伍的第一个加号 
-	I_ADD_5_1 = RuleImage(roi_front=(370,243,100,100), roi_back=(370,243,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_add_5_1.png")
+	I_ADD_5_1 = RuleImage(roi_front=(370,243,100,100), roi_back=(370,243,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeTeam/team1/team1_add_5_1.png")
 	# description 
-	I_ADD_5_2 = RuleImage(roi_front=(612,263,100,100), roi_back=(612,263,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_add_5_2.png")
+	I_ADD_5_2 = RuleImage(roi_front=(612,263,100,100), roi_back=(612,263,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeTeam/team1/team1_add_5_2.png")
 	# description 
-	I_ADD_5_3 = RuleImage(roi_front=(862,243,100,100), roi_back=(862,243,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_add_5_3.png")
+	I_ADD_5_3 = RuleImage(roi_front=(862,243,100,100), roi_back=(862,243,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeTeam/team1/team1_add_5_3.png")
 	# description 
-	I_ADD_5_4 = RuleImage(roi_front=(1118,228,100,100), roi_back=(1118,228,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_add_5_4.png")
+	I_ADD_5_4 = RuleImage(roi_front=(1118,228,100,100), roi_back=(1118,228,100,100), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeTeam/team1/team1_add_5_4.png")
 	# 游戏服务器获取在线好友时等待的图片 
 	I_LOAD_FRIEND = RuleImage(roi_front=(709,546,134,60), roi_back=(709,546,134,60), threshold=0.8, method="Template matching", file="./tasks/Component/GeneralInvite/gi/gi_load_friend.png")
 	# 左上角退出 

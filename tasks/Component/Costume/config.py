@@ -34,6 +34,9 @@ class RealmType(str, Enum):
 class ThemeType(str, Enum):
     COSTUME_THEME_DEFAULT = 'costume_theme_default'  # 伊始之卷
 
+class TeamType(str, Enum):
+    COSTUME_TEAM_1 = 'costume_team_1'  # 默认
+    COSTUME_TEAM_2 = 'costume_team_2'  # 宛然春意
 
 # 幕间，就是式神录这里
 class ShikigamiType(str, Enum):
@@ -84,6 +87,7 @@ class CostumeConfig(BaseModel):
     costume_main_type: MainType = Field(default=MainType.COSTUME_MAIN, description='costume_main_type_help')
     costume_realm_type: RealmType = Field(default=RealmType.COSTUME_REALM_DEFAULT, description='costume_realm_type_help')
     costume_theme_type: ThemeType = Field(default=ThemeType.COSTUME_THEME_DEFAULT, description='costume_theme_type_help')
+    costume_team_type: TeamType = Field(default=TeamType.COSTUME_TEAM_1, description='costume_team_type_help')
     costume_shikigami_type: ShikigamiType = Field(default=ShikigamiType.COSTUME_SHIKIGAMI_DEFAULT, description='costume_shikigami_type_help')
     costume_sign_type: SignType = Field(default=SignType.COSTUME_SIGN_DEFAULT, description='costume_sign_type_help')
     costume_battle_type: BattleType = Field(default=BattleType.COSTUME_BATTLE_DEFAULT, description='costume_battle_type_help')
@@ -92,3 +96,9 @@ class CostumeConfig(BaseModel):
     @field_validator("costume_realm_type", mode="before")
     def convert_old_value(cls, v):
         return RealmType.COSTUME_REALM_DEFAULT
+
+    @field_validator("costume_team_type", mode="before")
+    def convert_old_team_value(cls, v):
+        if v == "costume_team_default":
+            return TeamType.COSTUME_TEAM_1
+        return v

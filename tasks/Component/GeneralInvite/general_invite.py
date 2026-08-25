@@ -2,6 +2,7 @@
 # @author runhey
 # github https://github.com/runhey
 from time import sleep
+import random
 import numpy as np
 
 from enum import Enum
@@ -207,10 +208,12 @@ class GeneralInvite(BaseTask, GeneralInviteAssets):
         """
         if is_screenshot:
             self.screenshot()
-        if self.appear(GeneralInviteAssets.I_GI_EMOJI_1):
+        in_room = self.appear(GeneralInviteAssets.I_GI_EMOJI_1) or self.appear(GeneralInviteAssets.I_GI_EMOJI_2)
+        if in_room:
+            if getattr(self, '_room_animation_timer', None) is None:
+                self._room_animation_timer = Timer(random.uniform(3, 5)).start()
             return True
-        if self.appear(GeneralInviteAssets.I_GI_EMOJI_2):
-            return True
+        self._room_animation_timer = None
         return False
 
     def exit_room(self) -> bool:
@@ -245,6 +248,8 @@ class GeneralInvite(BaseTask, GeneralInviteAssets):
             self.screenshot()
             if not self.is_in_room(False):
                 break
+            if not self._room_animation_timer.reached():
+                continue
             if self.appear_then_click(self.I_FIRE, interval=1, threshold=0.7):
                 continue
             if self.appear_then_click(self.I_FIRE_SEA, interval=1, threshold=0.7):

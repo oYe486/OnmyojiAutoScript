@@ -5,11 +5,12 @@
 from module.atom.image import RuleImage
 from module.logger import logger
 
-from tasks.Component.Costume.config import (MainType, CostumeConfig, ShikigamiType, BattleType, CourtyardAffairType)
+from tasks.Component.Costume.config import (MainType, CostumeConfig, ShikigamiType, BattleType, CourtyardAffairType, TeamType)
 from tasks.Component.Costume.assets import CostumeAssets
 from tasks.Component.CostumeBattle.assets import CostumeBattleAssets
 from tasks.Component.CostumeShikigami.assets import CostumeShikigamiAssets
 from tasks.Component.CustomCourtyardAffair.assets import CustomCourtyardAffairAssets
+from tasks.Component.CostumeTeam.assets import CostumeTeamAssets
 
 # 庭院皮肤
 # 主界面皮肤（使用字典推导式动态生成）
@@ -79,6 +80,28 @@ courtyard_affair_model = {
     } for i in range(1, 2)
 }
 
+# 组队场景资源按相同属性名放入 CostumeTeamAssets 后即可覆盖默认识别图。
+team_model = {
+    TeamType.COSTUME_TEAM_1: {
+        'I_FIRE': 'I_FIRE_1',
+        'I_ADD_1': 'I_ADD_1_1',
+        'I_ADD_2': 'I_ADD_2_1',
+        'I_ADD_5_1': 'I_ADD_5_1_1',
+        'I_ADD_5_2': 'I_ADD_5_2_1',
+        'I_ADD_5_3': 'I_ADD_5_3_1',
+        'I_ADD_5_4': 'I_ADD_5_4_1',
+    },
+    TeamType.COSTUME_TEAM_2: {
+        'I_FIRE': 'I_FIRE_2',
+        'I_ADD_1': 'I_ADD_1_2',
+        'I_ADD_2': 'I_ADD_2_2',
+        'I_ADD_5_1': 'I_ADD_5_1_2',
+        'I_ADD_5_2': 'I_ADD_5_2_2',
+        'I_ADD_5_3': 'I_ADD_5_3_2',
+        'I_ADD_5_4': 'I_ADD_5_4_2',
+    },
+}
+
 
 class CostumeBase:
     def check_costume(self, config: CostumeConfig=None):
@@ -86,6 +109,7 @@ class CostumeBase:
             config: CostumeConfig = self.config.model.global_game.costume_config
         self.check_costume_main(config.costume_main_type)
         self.check_costume_battle(config.costume_battle_type)
+        self.check_costume_team(config.costume_team_type)
         self.check_costume_shikigami(config.costume_shikigami_type)
         self.check_custom_courtyard_affair(config.custom_courtyard_affair)
 
@@ -102,6 +126,10 @@ class CostumeBase:
             asset_before_object.roi_back = asset_after.roi_back
         asset_before_object.threshold = asset_after.threshold
         asset_before_object.file = asset_after.file
+        asset_before_object._image = None
+        asset_before_object._kp = None
+        asset_before_object._des = None
+        asset_before_object.__dict__.pop('name', None)
 
     def check_costume_main(self, main_type: MainType):
         if main_type == MainType.COSTUME_MAIN:
@@ -126,6 +154,15 @@ class CostumeBase:
                 self.replace_img(key, assert_value, rp_roi_back=False)
             else:
                 self.replace_img(key, assert_value)
+
+    def check_costume_team(self, team_type: TeamType):
+        logger.info(f'Switch team scene {team_type}')
+        for key, value in team_model.get(team_type, {}).items():
+            assert_value: RuleImage = getattr(CostumeTeamAssets, value, None)
+            if assert_value is None:
+                logger.warning(f'Missing team scene asset: {value}, keep default asset')
+                continue
+            self.replace_img(key, assert_value)
 
     def check_costume_shikigami(self, shikigami_type: ShikigamiType):
         if shikigami_type == ShikigamiType.COSTUME_SHIKIGAMI_DEFAULT:
