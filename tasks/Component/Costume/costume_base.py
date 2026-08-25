@@ -156,6 +156,8 @@ class CostumeBase:
                 self.replace_img(key, assert_value)
 
     def check_costume_team(self, team_type: TeamType):
+        if not getattr(self, 'uses_team_scene_assets', False):
+            return
         logger.info(f'Switch team scene {team_type}')
         for key, value in team_model.get(team_type, {}).items():
             assert_value: RuleImage = getattr(CostumeTeamAssets, value, None)

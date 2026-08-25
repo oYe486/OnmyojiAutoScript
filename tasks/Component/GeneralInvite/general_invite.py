@@ -40,6 +40,7 @@ class RoomType(str, Enum):
 
 
 class GeneralInvite(BaseTask, GeneralInviteAssets):
+    uses_team_scene_assets = True
     timer_invite = None
     timer_wait = None
     timer_emoji = None  # 等待期间如果没有操作的话，可能会导致长时间无响应报错
