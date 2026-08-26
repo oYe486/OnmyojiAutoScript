@@ -247,14 +247,15 @@ class GeneralInvite(BaseTask, GeneralInviteAssets):
     def click_fire(self):
         while 1:
             self.screenshot()
-            if not self.is_in_room(False):
-                break
-            if not self._room_animation_timer.reached():
+            room_animation_timer = getattr(self, '_room_animation_timer', None)
+            if room_animation_timer is not None and not room_animation_timer.reached():
                 continue
             if self.appear_then_click(self.I_FIRE, interval=1, threshold=0.7):
                 continue
             if self.appear_then_click(self.I_FIRE_SEA, interval=1, threshold=0.7):
                 continue
+            if not self.is_in_room(False):
+                break
 
     @cached_property
     def room_type(self) -> RoomType:
