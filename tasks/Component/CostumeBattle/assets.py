@@ -40,7 +40,7 @@ class CostumeBattleAssets:
 	# 指针 
 	I_LOCAL_11 = RuleImage(roi_front=(29,566,29,28), roi_back=(29,566,40,40), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeBattle/battle11/battle11_local_11.png")
 	# 战斗信息标识 
-	I_BATTLE_INFO_11 = RuleImage(roi_front=(235,21,29,28), roi_back=(142,0,169,71), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeBattle/battle11/battle11_battle_info_11.png")
+	I_BATTLE_INFO_11 = RuleImage(roi_front=(301,21,29,28), roi_back=(142,0,207,71), threshold=0.8, method="Template matching", file="./tasks/Component/CostumeBattle/battle11/battle11_battle_info_11.png")
 
 
 	# Image Rule Assets
