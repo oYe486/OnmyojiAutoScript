@@ -62,6 +62,9 @@ pycparser==2.21           # via cffi
 pycryptodome==3.21.0      # via onepush
 pydantic==2.10.0          # via -r requirements-in.txt, fastapi
 pydantic-core==2.27.0     # via pydantic
+PySide6==6.8.2            # via -r requirements-in.txt
+PySide6-Addons==6.8.2     # via PySide6
+PySide6-Essentials==6.8.2  # via PySide6
 pyelftools==0.30          # via apkutils2
 pygments==2.17.2          # via frida-tools, rich
 pyparsing==3.1.1          # via packaging

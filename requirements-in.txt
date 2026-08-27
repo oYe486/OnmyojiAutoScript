@@ -23,6 +23,9 @@ websockets==13.1
 zerorpc==0.6.3
 pydantic==2.10.0
 
+# GUI
+PySide6==6.8.2
+
 # Utils
 rich==13.3.5
 pyyaml==6.0.2
