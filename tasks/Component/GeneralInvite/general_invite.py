@@ -257,6 +257,19 @@ class GeneralInvite(BaseTask, GeneralInviteAssets):
             if not self.is_in_room(False):
                 break
 
+    def room_has_teammate(self, empty_slot: RuleImage) -> bool:
+        """Check an occupied slot only after the room entrance animation is over."""
+        room_animation_timer = getattr(self, '_room_animation_timer', None)
+        if room_animation_timer is None or not room_animation_timer.reached():
+            self._teammate_confirm_timer = None
+            return False
+        if not self.appear(self.I_FIRE) or self.appear(empty_slot):
+            self._teammate_confirm_timer = None
+            return False
+        if getattr(self, '_teammate_confirm_timer', None) is None:
+            self._teammate_confirm_timer = Timer(1, count=2).start()
+        return self._teammate_confirm_timer.reached()
+
     @cached_property
     def room_type(self) -> RoomType:
         """

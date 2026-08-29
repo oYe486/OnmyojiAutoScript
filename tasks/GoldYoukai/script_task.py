@@ -69,7 +69,7 @@ class ScriptTask(GameUi, GeneralBattle, GeneralRoom, GeneralInvite, SwitchSoul, 
                     count += 1
                     self.run_general_battle()
                     break
-                if not self.appear(self.I_ADD_5_1):
+                if self.room_has_teammate(self.I_ADD_5_1):
                     # 有人进来了，可以进行挑战
                     logger.info('There is someone in the room and start the challenge')
                     self.click_fire()
