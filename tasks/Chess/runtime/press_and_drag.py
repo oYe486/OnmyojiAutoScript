@@ -19,7 +19,7 @@ def Press_and_Drag(
     device,
     p1,
     p2,
-    hold_duration=0.5,
+    hold_duration=(0.2, 0.3),
     point_random=(-10, -10, 10, 10),
     swipe_duration=0.5,
     name='Press_and_Drag',
@@ -27,6 +27,7 @@ def Press_and_Drag(
     """在起点按住后拖到终点；仅供 Chess 手牌、棋盘和御魂操作。"""
     device.handle_control_check(name)
     p1, p2 = ensure_int(p1, p2)
+    hold_duration = ensure_time(hold_duration)
     action_log = 'Press_and_Drag %s -> %s' % (
         point2str(*p1),
         point2str(*p2),

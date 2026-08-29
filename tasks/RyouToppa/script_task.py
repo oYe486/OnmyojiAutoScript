@@ -17,7 +17,6 @@ from module.logger import logger
 from module.exception import TaskEnd
 from module.atom.image_grid import ImageGrid
 from module.base.utils import point2str
-from module.base.timer import Timer
 from module.exception import GamePageUnknownError
 
 
@@ -63,6 +62,8 @@ area_map = (
         "finished_sign": (RyouToppaAssets.I_AREA_8_FINISHED, RyouToppaAssets.I_AREA_8_FINISHED_NEW)
     }
 )
+
+TOPPA_CLICK_FAILURE_LIMIT = 4
 
 
 def random_delay(min_value: float = 1.0, max_value: float = 2.0, decimal: int = 1):
@@ -274,7 +275,12 @@ class ScriptTask(GeneralBattle, GameUi, SwitchSoul, RyouToppaAssets):
             p1 = (safe_pos_x, safe_pos_y)
             p2 = (safe_pos_x, safe_pos_y - 101)
             logger.info('Swipe %s -> %s, %s ' % (point2str(*p1), point2str(*p2), duration))
-            self.device.swipe_adb(p1, p2, duration=duration)
+            self.device.swipe(
+                p1,
+                p2,
+                duration=duration,
+                control_name='RYOU_TOPPA_REFRESH',
+            )
             time.sleep(2)
 
     def attack_area(self, index: int):
@@ -290,23 +296,28 @@ class ScriptTask(GeneralBattle, GameUi, SwitchSoul, RyouToppaAssets):
             time.sleep(delay)
         rcl = area_map[index].get("rule_click")
         # 塔塔开！
-        enter_click_count = 0
+        click_failure_count = 0
         self.device.click_record_clear()
         while True:
             self.screenshot()
             if self.is_in_battle(False):
                 logger.info("Start attach area [%s]" % str(index + 1))
                 return self.run_general_battle(config=self.config.ryou_toppa.general_battle_config)
-            # 每次点击后都会先在下一轮截图确认是否已进入战斗；第三次
-            # 点击后仍未进入，通常表示该结界已经被其他寮友抢先挑战。
-            if enter_click_count >= 3:
-                logger.warning('挑战进入次数过多，可能已被击破')
+            if click_failure_count >= TOPPA_CLICK_FAILURE_LIMIT:
+                logger.warning(
+                    '点击目标或挑战按钮累计失败4次，跳过当前区域'
+                )
                 return False
-            if self.appear_then_click(RealmRaidAssets.I_FIRE, interval=2, threshold=0.8):
-                enter_click_count += 1
+            if self.appear_then_click(
+                RealmRaidAssets.I_FIRE,
+                interval=2,
+                threshold=0.8,
+            ):
+                click_failure_count += 1
                 continue
             if self.click(rcl, interval=5):
-                enter_click_count += 1
+                time.sleep(random.uniform(0, 0.3))
+                click_failure_count += 1
                 continue
 
 
