@@ -30,7 +30,7 @@ from tasks.Component.Login.service import LoginService
 from tasks.DailyTrifles.assets import DailyTriflesAssets
 from tasks.GlobalGame.assets import GlobalGameAssets
 from tasks.GameUi.assets import GameUiAssets
-from tasks.GameUi.matcher import any_of
+from tasks.GameUi.matcher import all_of, any_of, not_
 from tasks.GameUi.page_definition import Page
 from tasks.KekkaiUtilize.assets import KekkaiUtilizeAssets
 from tasks.Restart.assets import RestartAssets
@@ -45,14 +45,11 @@ HIGH_DENSITY_RANDOM_CLICK_TASKS = frozenset({
 # 依据现有设备日志：这些任务的结算点击量较低，或运行频率极低。
 # 未列出的普通任务也默认按低密度处理，仅高密度任务显式传入 Scatter。
 LOW_DENSITY_RANDOM_CLICK_TASKS = frozenset({
-    'AbyssShadows', 'AreaBoss', 'DailyTrifles', 'Delegation',
+    'AbyssShadows', 'AreaBoss', 'Chess', 'DailyTrifles', 'Delegation',
     'DemonEncounter', 'Dokan', 'Duel', 'GoldYoukai', 'GuildBanquet',
     'Hunt', 'KekkaiUtilize', 'Orochi', 'RealmRaid', 'Restart',
     'WantedQuests', 'WeeklyPurchase',
 })
-
-# 百鬼棋局虽然日志点击量低，但其奖励页有独立安全多边形，不走通用四区域。
-DEDICATED_SCATTER_RANDOM_CLICK_TASKS = frozenset({'Chess'})
 
 
 def settlement_random_click(area=None) -> RuleClick:
@@ -185,7 +182,10 @@ page_login = Page(SwitchAccountAssets.I_CHECK_LOGIN_FORM, category="global")
 page_login.add_enter_success_hooks(handle_login_page)
 
 # 庭院主页(此处通过提高阈值来处理部分探索章节会识别成原始庭院的问题, 后续有其他更好方法需改善)
-page_main = Page(GameUiAssets.I_CHECK_MAIN, category="global")
+page_main = Page(
+    all_of(not_(GameUiAssets.I_CHECK_MAIN_SET), GameUiAssets.I_CHECK_MAIN),
+    category="global",
+)
 page_main.add_enter_success_hooks(
     GameUiAssets.I_AD_CLOSE_RED, GlobalGameAssets.I_UI_BACK_RED, RestartAssets.I_CANCEL_BATTLE,
 )

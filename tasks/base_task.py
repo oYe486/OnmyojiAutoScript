@@ -124,8 +124,9 @@ class BaseTask(GlobalGameAssets, CostumeBase):
         # nemu_ipc 返回为RGB
         # 其他方式未知
         self.device.screenshot()
-        # 判断勾协
-        self._burst()
+        # 优先清理悬赏协作弹窗；处理后刷新并复核，避免原流程使用被遮挡的画面。
+        while self._burst():
+            self.device.screenshot()
 
         # # 判断网络异常
         # if self.appear(self.I_NETWORK_ABNORMAL):
@@ -315,10 +316,19 @@ class BaseTask(GlobalGameAssets, CostumeBase):
             self.device.click(click_x, click_y, control_name=target.name)
         return True
 
-    def wait_until_disappear(self, target: RuleImage) -> None:
+    def wait_until_disappear(self, target: RuleImage, timeout: float = None) -> None:
+        """
+        等待目标从屏幕上消失
+        :param target: 目标元素
+        :param timeout: 可选超时秒数，超时后即使目标仍在也会返回；不传则一直等到消失
+        """
+        timeout_timer = Timer(timeout).start() if timeout else None
         while 1:
             self.screenshot()
             if not self.appear(target):
+                break
+            if timeout_timer and timeout_timer.reached():
+                logger.warning(f'{target.name} still visible after {timeout}s')
                 break
 
     def wait_until_pos_stable(self, target: RuleImage, stable_time: float = 0.3, timeout: float = 2,
